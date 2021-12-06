@@ -1,0 +1,18 @@
+{
+    "address": {
+        "name": "{{ address_group_name }}",
+        "edit-version": "{{ edit_version }}",
+        "members": {
+            "member": [
+                {% for member in address_members %}
+                {
+                "id": "{{ member }}"
+                }{{ "," if not loop.last }}
+                {% endfor %}
+            ]
+        },
+        "address-type": "GROUP",
+        "definition-type": "CUSTOM",
+        "id": "{{ group_id }}"
+    }
+}

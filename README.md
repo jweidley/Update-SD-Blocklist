@@ -49,6 +49,18 @@ The blocklist is a simple text file with 1 entry per line:
 
 A sample blocklist file (called sirt-list.txt) is included in the repo and shows the different address formats. There are a few incorrectly formatted entries to demonstrate the modules ability to detect & display errors.
 
+```
+##########################
+# Sirt Block List
+##########################
+1.1.1.1
+2.2.2.2
+2.2.2.3
+192.168.100.0/24
+172.16.101.0/24
+
+```
+
 ### About IP address Validation
 The entries in the blocklist file are checked for formatting by the Python ipaddress module. It may be possible for a specific entry to pass the ipaddress module validation but fail the Security Director validation. In those rare situations, verify the correct formatting in SD when creating the entry and use that formatting in the blocklist file.
 
@@ -56,21 +68,37 @@ The entries in the blocklist file are checked for formatting by the Python ipadd
 --------------------------------------------------------------------------
 # Running the Script
 The script **REQUIRES** two command line options: 
-- Username: using the -u or --user option
-- Filename: using the -f or --file option
+- Username: using the -u or --user option. This is the user account that will be used to login to Security Director.
+- Filename: using the -f or --file option. This is the text file with the list of IPv4 addresses/subnets.
+
 Next you are prompted for the password of the user. 
 ![](images/command-run.png)
 
-The script authenticates using the REST API and cookies are used for all additional communication with SD. The first thing the script does is gets the existing address objects in the supplied Address Group ('SIRT-Block-List' in this example). Next the blocklist is processed with each entry being printed to the screen with additional information. The IP address/subnet is validated using the Python ipaddress module, if the formatting is correct a "Format=passwd" message is printed. If there are errors in the formatting, "Format=ERROR" is displayed with a descriptive message or the error.
+--------------------------------------------------------------------------
+# Under the Covers
+1. The script authenticates using the REST API and cookies are used for all additional communication with SD. 
 
-Next, the script checks to see if there is already an existing address object so it knows if it has to create a new entry or utilize an existing entry. In this example, there is already and address object for 1.1.1.1 with an internal database ID of 1376256. If there isn't an existing address object, the script will print (New) and then create an address object for that entry. For 2.2.2.2, you can see the new internal database ID is 1376473.
+2. The first thing the script does is gets the existing address objects in the supplied Address Group ('**SIRT-Block-List**' in this example). 
+
+3. The blocklist is processed with each entry being printed to the screen with additional information. 
+   - The IP address/subnet is validated using the Python ipaddress module
+     - If the formatting is correct a "**Format=passed**" message is printed. 
+     - If there are errors in the formatting, "**Format=ERROR**" is displayed with a descriptive message or the error.
+
+   - Checks to see if there is already an existing address object for that address/subnet. From the screenshot, you can see that:
+     - There is an **Existing** address object for 1.1.1.1 with an internal database ID of 1376256. 
+     - There is not an exist address object for 2.2.2.2 so a **New** address object is created using the [add_address.j2](add_address.j2) JSON template and the internal database ID is 1376473.
 ![](images/command-run2.png)
 
-After all of the entries in the blocklist have been processed, a "Complete" message is printed at the bottom to remind you to review the additions to the address group in Security Director and that devices need to be manually updated to receive the changes.  If there were any IP address formatting problems, a summary is printed at the end.
+4. After all of the entries have been processed the address group will be updated
+   - The address group is updated using the [modify_address_group.j2](modify_address_group.j2) JSON template
+   - :warning: Branch SRX devices are limited in the number of address objects that can be in a single address group. The script counts the number of entries in the address group and prints the following error if it exceeds 1023.
+![](images/1024-error.png)
+
+5. A "Complete" message is printed at the bottom to remind you to review the additions to the address group in Security Director and that devices need to be manually updated to receive the changes.  
+   - If there were any IP address formatting problems while processing the blocklist, a summary of errors is printed at the end.
 ![](images/command-run3.png)
 
-:warning: Branch SRX devices are limited in the number of address objects that can be in a single address group. The script counts the number of entries in the address group and prints the following error if it exceeds 1023.
-![](images/1024-error.png)
 
 ----------------------------------------------------------------------------------------
 ## References

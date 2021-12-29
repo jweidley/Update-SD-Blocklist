@@ -1,4 +1,4 @@
-# SD Update Blocklist
+# Update SD Blocklist
 
 ## Purpose
 Maintaining security feeds is easily accomplished with Juniper Policy Enforcer or SecIntel but not all customers can utilize those products/services. This script is for customers that are managing firewalls with Security Director and need an easy way to add a list of IP addresses & subnets to an existing Security Group for bulk block requests.
@@ -15,7 +15,7 @@ The script was developed and tested using:
    - ![](images/nmp-api-access.png)
    - :thumbsdown: Using the 'super' account is NOT recommended in production environments.
 2. Existing address group
-    See References section below for a link to the documentation.
+    See [References section](https://github.com/jweidley/Update-SD-Blocklist#references) below for a link to the documentation.
 3. Address group applied to a security policy 
 
 ## Automation Host Setup
@@ -26,7 +26,7 @@ The script was developed and tested using:
     pip3 install -r requirements.txt
 ```
 
-3. updateBlocklist.py Variable Modifications
+3. [updateBlocklist.py](updateBlocklist.py) Variable Modifications
     - **spaceURL**: Is the IP address or hostname of the Space/SD server
     - **AddressGroupName**: Is the name of an existing address-group in SD that new address objects will be added to
 
@@ -51,25 +51,26 @@ A sample blocklist file (called sirt-list.txt) is included in the repo and shows
 
 ```
 ##########################
-# Sirt Block List
+# SIRT Block List
 ##########################
 1.1.1.1
 2.2.2.2
 2.2.2.3
 192.168.100.0/24
 172.16.101.0/24
-
 ```
 
 ### About IP address Validation
-The entries in the blocklist file are checked for formatting by the Python ipaddress module. It may be possible for a specific entry to pass the ipaddress module validation but fail the Security Director validation. In those rare situations, verify the correct formatting in SD when creating the entry and use that formatting in the blocklist file.
+The entries in the blocklist file are checked for formatting by the Python ipaddress module. It may be possible for a specific entry to pass the ipaddress module validation but fail the Security Director validation. In those rare situations, verify the correct formatting in Security Director when manually creating the entry and use that formatting in the blocklist file.
 
 
 --------------------------------------------------------------------------
 # Running the Script
 The script **REQUIRES** two command line options: 
-- Username: using the -u or --user option. This is the user account that will be used to login to Security Director.
-- Filename: using the -f or --file option. This is the text file with the list of IPv4 addresses/subnets.
+Option   | Short | Long   | Description
+---------|-------|--------|----------------------------------------------------------
+Username | -u    | --user | This is the user account that will be used to login to Security Director.
+Filename | -f    | --file | This is the text file with the list of IPv4 addresses/subnets.
 
 Next you are prompted for the password of the user. 
 ![](images/command-run.png)
@@ -78,7 +79,7 @@ Next you are prompted for the password of the user.
 # Under the Covers
 1. The script authenticates using the REST API and cookies are used for all additional communication with SD. 
 
-2. The first thing the script does is gets the existing address objects in the supplied Address Group ('**SIRT-Block-List**' in this example). 
+2. The first thing the script does is gets the existing address objects in the supplied Address Group ('**SIRT-Block-List**' by default). 
 
 3. The blocklist is processed with each entry being printed to the screen with additional information. 
    - The IP address/subnet is validated using the Python ipaddress module
@@ -87,7 +88,7 @@ Next you are prompted for the password of the user.
 
    - Checks to see if there is already an existing address object for that address/subnet. From the screenshot, you can see that:
      - There is an **Existing** address object for 1.1.1.1 with an internal database ID of 1376256. 
-     - There is not an exist address object for 2.2.2.2 so a **New** address object is created using the [add_address.j2](add_address.j2) JSON template and the internal database ID is 1376473.
+     - There is not an existing address object for 2.2.2.2 so a **New** address object is created using the [add_address.j2](add_address.j2) JSON template and the internal database ID is 1376473.
 ![](images/command-run2.png)
 
 4. After all of the entries have been processed the address group will be updated

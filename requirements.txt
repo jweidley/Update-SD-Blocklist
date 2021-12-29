@@ -1,0 +1,7 @@
+Jinja2
+jsonpatch
+jsonpointer
+jsonschema
+requests
+urllib3
+ipaddress

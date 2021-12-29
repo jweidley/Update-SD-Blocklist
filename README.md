@@ -47,7 +47,7 @@ The blocklist is a simple text file with 1 entry per line:
   - a valid IPv4 host address (i.e 1.1.1.1) 
   - a valid IPv4 subnet (i.e. 192.168.1.0/24)
 
-A sample blocklist file (called sirt-list.txt) is included in the repo and shows the different address formats. There are a few incorrectly formatted entries to demonstrate the modules ability to detect & display errors.
+A sample blocklist file [sirt-list.txt](sirt-list.txt) is included in the repo and shows the different address formats. There are a few incorrectly formatted entries to demonstrate the modules ability to detect & display errors.
 
 ```
 ##########################
@@ -81,7 +81,7 @@ Next you are prompted for the password of the user.
 
 2. The first thing the script does is gets the existing address objects in the supplied Address Group ('**SIRT-Block-List**' by default). 
 
-3. The blocklist is processed with each entry being printed to the screen with additional information. 
+3. The blocklist file is processed with each entry being printed to the screen with additional information. 
    - The IP address/subnet is validated using the Python ipaddress module
      - If the formatting is correct a "**Format=passed**" message is printed. 
      - If there are errors in the formatting, "**Format=ERROR**" is displayed with a descriptive message or the error.

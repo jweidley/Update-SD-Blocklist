@@ -100,6 +100,12 @@ Next you are prompted for the password of the user.
    - If there were any IP address formatting problems while processing the blocklist, a summary of errors is printed at the end.
 ![](images/command-run3.png)
 
+6. In Security Director:
+   - Address objects are created with a prefix of "API-" to make them easily searchable
+   - The Description field is populated with the name of this script as well as the date it was created
+   ![](images/sd-newObjects.png)
+   - The new objects are also added to the address group
+   ![](images/sd-groupView.png)
 
 ----------------------------------------------------------------------------------------
 ## References

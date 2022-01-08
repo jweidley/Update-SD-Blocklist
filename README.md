@@ -65,8 +65,12 @@ The entries in the blocklist file are checked for formatting by the Python ipadd
 
 
 --------------------------------------------------------------------------
-# Running the Script
+# Running updateBlockList.py
 The script **REQUIRES** two command line options: 
+```
+./updateBlocklist.py --user super --file sirt-list.txt
+```
+
 Option   | Short | Long   | Description
 ---------|-------|--------|----------------------------------------------------------
 Username | -u    | --user | This is the user account that will be used to login to Security Director.
@@ -100,14 +104,47 @@ Next you are prompted for the password of the user.
    - If there were any IP address formatting problems while processing the blocklist, a summary of errors is printed at the end.
 ![](images/command-run3.png)
 
-6. In Security Director:
+6. Verify changes in Security Director:
    - Address objects are created with a prefix of "API-" to make them easily searchable
    - The Description field is populated with the name of this script as well as the date it was created
    ![](images/sd-newObjects.png)
    - The new objects are also added to the address group
    ![](images/sd-groupView.png)
 
-----------------------------------------------------------------------------------------
+7. Follow the normal process for deploying the changes to the firewalls
+
+--------------------------------------------------------------------------
+# Searching Object Descriptions
+It would be very useful to be able to search the "Description" fields of address objects, but unfortunately Security Director doesn't currently have this functionality. As a workaround, this repo includes [sd-searchDescription.py](sd-searchDescription.py) that allows for simplistic searches for text located in the description field of all address objects.
+
+## Running sd-searchDescription.py
+Like updateBlockList.py, this script also **REQUIRES** two command line options: 
+```
+./sd-searchDescription.py --user super --search 06jan
+```
+
+Option   | Short | Long     | Description
+---------|-------|----------|----------------------------------------------------------
+Username | -u    | --user   | This is the user account that will be used to login to Security Director.
+Search   | -s    | --search | The search string to look for in the description field.
+
+### Sample Output
+```
+==================================================================
+ Security Director: Search Address Object Descriptions Fields
+==================================================================
+Enter password for user 'super': 
+Password: 
+=====================================================
+ The following objects contain a description of '06jan'
+=====================================================
+API-2.2.2.2
+API-2.2.2.3
+API-3.3.3.3
+API-192.168.100.0/24
+```
+
+--------------------------------------------------------------------------
 ## References
 1. [Junos Space RESTful API Reference for Security Director 20.1R1](https://www.juniper.net/documentation/en_US/junos-space21.2/information-products/api-ref/security-director-rest-api-21.2r1.pdf)
 

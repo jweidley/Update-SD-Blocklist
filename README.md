@@ -83,7 +83,8 @@ Next you are prompted for the password of the user.
 # Under the Covers
 1. The script authenticates using the REST API and cookies are used for all additional communication with SD. 
 
-2. The first thing the script does is gets the existing address objects in the supplied Address Group ('**SIRT-Block-List**' by default). 
+2. The first thing the script does is gets the existing address objects from the configured Address Group ('**SIRT-Block-List**' by default). 
+   - The API guide states that the "Modify Address" API call is a **FULL REPLACE** operation. So in order to add new objects to the group the script has to find out which objects are already in the group.
 
 3. The blocklist file is processed with each entry being printed to the screen with additional information. 
    - The IP address/subnet is validated using the Python ipaddress module

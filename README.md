@@ -89,7 +89,7 @@ Next you are prompted for the password of the user.
 3. The blocklist file is processed with each entry being printed to the screen with additional information. 
    - The IP address/subnet is validated using the Python ipaddress module
      - If the formatting is correct a "**Format=passed**" message is printed. 
-     - If there are errors in the formatting, "**Format=ERROR**" is displayed with a descriptive message or the error.
+     - If there are errors in the formatting, "**Format=ERROR**" is displayed with a descriptive error message.
 
    - Checks to see if there is already an existing address object for that address/subnet. From the screenshot, you can see that:
      - There is an **Existing** address object for 1.1.1.1 with an internal database ID of 1376256. 
